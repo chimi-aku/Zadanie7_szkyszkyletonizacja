@@ -19,7 +19,6 @@ public class HelloController {
     @FXML private ImageView originalImageView;
     @FXML private ImageView skeletonImageView;
 
-
     @FXML protected void onLoadImageBtnClick()
     {
         Stage thisStage = (Stage) loadImageBtn.getScene().getWindow();
