@@ -5,16 +5,17 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
-
 <Pane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.zadanie7_szkyszkyletonizacja.HelloController">
    <children>
       <Pane layoutY="4.0" prefHeight="544.0" prefWidth="839.0">
          <children>
-             <Button fx:id="loadImageBtn" layoutX="14.0" layoutY="14.0" onAction="#onLoadImageBtnClick" text="load image" />
-            <ImageView fx:id="originalImageView" fitHeight="273.0" fitWidth="332.0" layoutX="34.0" layoutY="106.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="skeletonImageView" fitHeight="273.0" fitWidth="332.0" layoutX="452.0" layoutY="106.0" pickOnBounds="true" preserveRatio="true" />
-            <Text layoutX="508.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Skeleton Image" wrappingWidth="119.2578125" />
+            <ImageView fx:id="originalImageView" fitHeight="273.0" fitWidth="332.0" layoutX="427.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true" />
+             <Button fx:id="loadImageBtn" layoutX="24.0" layoutY="14.0" onAction="#onLoadImageBtnClick" text="load image" />
+            <Text layoutX="444.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Skeleton Image" wrappingWidth="119.2578125" />
+            <Text layoutX="39.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Original Image" wrappingWidth="119.2578125" />
+            <Button fx:id="k3mImageBtn" layoutX="444.0" layoutY="447.0" mnemonicParsing="false" onAction="#onk3mImageBtnClick" text="K3M " />
          </children>
       </Pane>
+      <ImageView fx:id="skeletonImageView" fitHeight="273.0" fitWidth="332.0" layoutX="29.0" layoutY="140.0" pickOnBounds="true" preserveRatio="true" />
    </children>
 </Pane>
