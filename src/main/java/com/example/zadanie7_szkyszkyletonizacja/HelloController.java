@@ -36,6 +36,7 @@ public class HelloController {
 
         BufferedImage simpleBinarization = Binarization.simpleBinarization(originalImage, 140);
         int[][] imgArray = K3M.convertBinarizatedImgToArray2D(simpleBinarization);
+        K3M.k3m(imgArray);
 
 
         skeletonImageView.setImage(FileHandler.convertToFxImage(simpleBinarization));

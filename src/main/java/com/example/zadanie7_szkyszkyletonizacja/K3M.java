@@ -18,41 +18,66 @@ public class K3M {
 
         int width = imgArray[1].length;
         int height = imgArray.length;
-
+        int weight;
+        boolean removed = false;
         //obramówka z zer
         int[][] imageWidened = new int[height + 2][width + 2];
 
         for(int i = 1; i < height; i++){
             System.arraycopy(imgArray[i - 1], 0, imageWidened[i], 1, width - 1);
         }
-
-        int[][] imageWidenedCopy = new int[height + 2][width + 2];
-
-        for(int i = 1; i < height; i++){
-            System.arraycopy(imageWidened[i - 1],0,imageWidenedCopy[i],1,width - 1);
-        }
-
+        int[][] border;
 
         do{
-            boolean check = Loop(height, width, imageWidened, imageWidenedCopy);
-            if(!check)
-            {
-                A1pix(height, width, imageWidened, imageWidenedCopy);
-                break;
+            border = new int[height + 2][width + 2];
+            for (int i = 1; i < height + 1; i++) {
+                for (int j = 1; j < width + 1; j++) {
+                    if (imageWidened[i][j] == 1) {
+                        weight = getWeight(imageWidened, i, j);
+                        if (A0[0][weight] == 1) {
+                            border[i][j] = 1;
+
+                        }
+                    }
+
+                }
             }
-        }while(true);
+            removed = false;
+            for (int phase = 1; phase < 5; phase++) {
+                for (int i = 1; i < height + 1; i++) {
+                    for (int j = 1; j < width + 1; j++) {
+                        if (imageWidened[i][j] == 1) {
+                            weight = getWeight(imageWidened, i, j);
+                            if (A0[phase][weight] == 1 && border[i][j] == 1) {
+                                imageWidened[i][j] = 0;
+                                removed = true;
 
+                            }
+                        }
 
+                    }
+                }
+            }
+        }while (removed);
+
+        for (int i = 1; i < height + 1; i++) {
+            for (int j = 1; j < width + 1; j++) {
+                if (imageWidened[i][j] == 1) {
+                    weight = getWeight(imageWidened, i, j);
+                    if (A1pix[weight] == 1) {
+                        imageWidened[i][j] = 0;
+                    }
+                }
+            }
+        }
 
         for(int i = 1; i < height + 1; i++){
             for (int j = 1; j < width + 1; j++)
             {
-                System.out.print(imageWidenedCopy[i][j]);
+                System.out.print(imageWidened[i][j]);
             }
             System.out.println();
         }
-
-
     }
 
     public static int[][] convertBinarizatedImgToArray2D(BufferedImage imgSrc) {
@@ -71,52 +96,16 @@ public class K3M {
 
         return imgArray;
     }
-
-    private static boolean Loop(int height, int width, int[][] imageWidened, int[][] imageWidenedCopy){
+    private static int getWeight(int[][] imageWidened, int i, int j) {
         int weight;
-        boolean check = false;
-        for(int i = 1; i < height + 1; i++) {
-            for (int j = 1; j < width + 1; j++) {
-                if (imageWidened[i][j] == 1) {
-                    weight = imageWidened[i - 1][j] +
-                            imageWidened[i - 1][j + 1] * 2 +
-                            imageWidened[i][j + 1] * 4 +
-                            imageWidened[i + 1][j + 1] * 8 +
-                            imageWidened[i + 1][j] * 16 +
-                            imageWidened[i + 1][j - 1] * 32 +
-                            imageWidened[i][j - 1] * 64 +
-                            imageWidened[i - 1][j - 1] * 128;
-                    if (A0[0][weight] == 1) {
-                        imageWidenedCopy[i][j] = 0;
-                        check = true;
-                    }
-                }
-            }
-        }
-        return check;
+        weight = imageWidened[i - 1][j] +
+                imageWidened[i - 1][j + 1] * 2 +
+                imageWidened[i][j + 1] * 4 +
+                imageWidened[i + 1][j + 1] * 8 +
+                imageWidened[i + 1][j] * 16 +
+                imageWidened[i + 1][j - 1] * 32 +
+                imageWidened[i][j - 1] * 64 +
+                imageWidened[i - 1][j - 1] * 128;
+        return weight;
     }
-
-    private static void A1pix(int height, int width, int[][] imageWidened, int[][] imageWidenedCopy)
-    {
-        int weight;
-        for(int i = 1; i < height + 1; i++) {
-            for (int j = 1; j < width + 1; j++) {
-                if (imageWidened[i][j] == 1) {
-                    weight = imageWidened[i - 1][j] +
-                            imageWidened[i - 1][j + 1] * 2 +
-                            imageWidened[i][j + 1] * 4 +
-                            imageWidened[i + 1][j + 1] * 8 +
-                            imageWidened[i + 1][j] * 16 +
-                            imageWidened[i + 1][j - 1] * 32 +
-                            imageWidened[i][j - 1] * 64 +
-                            imageWidened[i - 1][j - 1] * 128;
-                    if (A1pix[weight] == 1) {
-                        imageWidenedCopy[i][j] = 0;
-                    }
-                }
-            }
-        }
-    }
-
-
 }
