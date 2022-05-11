@@ -276,21 +276,11 @@ public class Binarization {
                 int iR = (( iRet & 0xff0000) >> 16);
                 int iAve = ( iR + iG + iB ) / 3;
 
-                processChannel(threshold, row, col, iAve, imgSrc, 0, 0xffffff);
+                 imgSrc.setRGB(row, col, (iR > threshold)?0:0xffffff);
             }
         }
 
         return imgSrc;
-    }
-
-
-
-    private static void processChannel(double value, int row, int col, int iR, BufferedImage image, int zero, int one) {
-        if (iR > value) {
-            image.setRGB(row, col, one);
-        } else {
-            image.setRGB(row, col, zero);
-        }
     }
 
     static BufferedImage deepCopy(BufferedImage bi)
