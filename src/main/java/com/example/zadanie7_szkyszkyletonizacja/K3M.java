@@ -97,11 +97,22 @@ public class K3M {
 
         return imgArray;
     }
-    public static BufferedImage convertArraytoBinarizatedImg(int[][] imageWidened){
-        BufferedImage image;
-        for(int i=1; i<imageWidened[i][0];i++){
-            for(int j=1; j<imageWidened[0][j];j++){
+    public static BufferedImage convertArraytoBinarizatedImg(int[][] imgArray){
 
+        int width = imgArray[1].length;
+        int height = imgArray.length;
+
+        BufferedImage image = new BufferedImage(width - 2, height - 2, BufferedImage.TYPE_INT_RGB);
+
+        for(int i = 1; i < height - 1; i++){
+            for(int j = 1; j < width - 1; j++){
+
+                if(imgArray[i][j] == 1) {
+                    image.setRGB(j - 1, i - 1, 0);
+                }
+                else {
+                    image.setRGB(j - 1, i - 1, 0xffffff);
+                }
             }
         }
         return image;
