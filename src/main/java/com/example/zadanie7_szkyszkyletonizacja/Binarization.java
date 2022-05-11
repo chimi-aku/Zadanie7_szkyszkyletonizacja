@@ -80,6 +80,7 @@ public class Binarization {
         return img;
     }
 
+
     public static BufferedImage PhansalkarBinarization(BufferedImage imgBuff, int window, double k)
     {
         //Window size (for each side)
@@ -257,6 +258,39 @@ public class Binarization {
         }
 
         return img;
+    }
+
+    public static BufferedImage simpleBinarization(BufferedImage imgSrc, double threshold) {
+
+        int width = imgSrc.getWidth();
+        int height = imgSrc.getHeight();
+        int[][] result = new int[width][height];
+
+        for (int row = 0; row < width; row++) {
+            for (int col = 0; col < height; col++) {
+                result[row][col] = imgSrc.getRGB(row, col);
+
+                int iRet = result[row][col];
+                int iB = (iRet & 0xff);
+                int iG = (( iRet & 0x00ff00) >> 8);
+                int iR = (( iRet & 0xff0000) >> 16);
+                int iAve = ( iR + iG + iB ) / 3;
+
+                processChannel(threshold, row, col, iAve, imgSrc, 0, 0xffffff);
+            }
+        }
+
+        return imgSrc;
+    }
+
+
+
+    private static void processChannel(double value, int row, int col, int iR, BufferedImage image, int zero, int one) {
+        if (iR > value) {
+            image.setRGB(row, col, one);
+        } else {
+            image.setRGB(row, col, zero);
+        }
     }
 
     static BufferedImage deepCopy(BufferedImage bi)

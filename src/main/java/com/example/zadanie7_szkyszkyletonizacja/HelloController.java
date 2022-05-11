@@ -30,10 +30,14 @@ public class HelloController {
     @FXML protected void onk3mImageBtnClick() throws IOException {
 
         // Binarization Testing
-        //BufferedImage binarizedImg = Binarization.NiblackBinarization(originalImage, 30, -.5);
-        BufferedImage binarizedImg = Binarization.PhansalkarBinarization(originalImage, 30, 0.3);
-        BufferedImage sauvolaBinarizedImg = Binarization.SauvolaBinarization(originalImage, 5, 0.5);
+//        BufferedImage niblackBinarizedImg = Binarization.NiblackBinarization(originalImage, 10, -.3);
+//        BufferedImage binarizedImg = Binarization.PhansalkarBinarization(originalImage, 30, 0.3);
+//        BufferedImage sauvolaBinarizedImg = Binarization.SauvolaBinarization(originalImage, 5, 0.5);
 
-        skeletonImageView.setImage(FileHandler.convertToFxImage(sauvolaBinarizedImg));
+        BufferedImage simpleBinarization = Binarization.simpleBinarization(originalImage, 140);
+
+
+
+        skeletonImageView.setImage(FileHandler.convertToFxImage(simpleBinarization));
     }
 }
