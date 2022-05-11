@@ -30,12 +30,12 @@ public class K3M {
 
         do{
             border = new int[height + 2][width + 2];
-            for (int i = 1; i < height + 1; i++) {
-                for (int j = 1; j < width + 1; j++) {
-                    if (imageWidened[i][j] == 1) {
-                        weight = getWeight(imageWidened, i, j);
+            for (int row = 1; row < height + 1; row++) {
+                for (int col = 1; col < width + 1; col++) {
+                    if (imageWidened[row][col] == 1) {
+                        weight = getWeight(imageWidened, row, col);
                         if (A0[0][weight] == 1) {
-                            border[i][j] = 1;
+                            border[row][col] = 1;
 
                         }
                     }
@@ -44,12 +44,12 @@ public class K3M {
             }
             removed = false;
             for (int phase = 1; phase < 5; phase++) {
-                for (int i = 1; i < height + 1; i++) {
-                    for (int j = 1; j < width + 1; j++) {
-                        if (imageWidened[i][j] == 1) {
-                            weight = getWeight(imageWidened, i, j);
-                            if (A0[phase][weight] == 1 && border[i][j] == 1) {
-                                imageWidened[i][j] = 0;
+                for (int row = 1; row < height + 1; row++) {
+                    for (int col = 1; col < width + 1; col++) {
+                        if (imageWidened[row][col] == 1) {
+                            weight = getWeight(imageWidened, row, col);
+                            if (A0[phase][weight] == 1 && border[row][col] == 1) {
+                                imageWidened[row][col] = 0;
                                 removed = true;
 
                             }
@@ -60,23 +60,15 @@ public class K3M {
             }
         }while (removed);
 
-        for (int i = 1; i < height + 1; i++) {
-            for (int j = 1; j < width + 1; j++) {
-                if (imageWidened[i][j] == 1) {
-                    weight = getWeight(imageWidened, i, j);
+        for (int row = 1; row < height + 1; row++) {
+            for (int col = 1; col < width + 1; col++) {
+                if (imageWidened[row][col] == 1) {
+                    weight = getWeight(imageWidened, row, col);
                     if (A1pix[weight] == 1) {
-                        imageWidened[i][j] = 0;
+                        imageWidened[row][col] = 0;
                     }
                 }
             }
-        }
-
-        for(int i = 1; i < height + 1; i++){
-            for (int j = 1; j < width + 1; j++)
-            {
-                System.out.print(imageWidened[i][j]);
-            }
-            System.out.println();
         }
         return imageWidened;
     }
@@ -90,9 +82,7 @@ public class K3M {
         for (int row = 0; row < width; row++) {
             for (int col = 0; col < height; col++) {
                 imgArray[row][col] = imgSrc.getRGB(row, col) != -1 ? 1 : 0;
-                System.out.print(imgArray[row][col]);
             }
-            System.out.println();
         }
 
         return imgArray;
