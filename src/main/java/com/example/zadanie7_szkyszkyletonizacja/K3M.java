@@ -102,16 +102,16 @@ public class K3M {
         int width = imgArray[1].length;
         int height = imgArray.length;
 
-        BufferedImage image = new BufferedImage(width - 2, height - 2, BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(height - 2, width - 2, BufferedImage.TYPE_INT_RGB);
 
         for(int i = 1; i < height - 1; i++){
             for(int j = 1; j < width - 1; j++){
 
                 if(imgArray[i][j] == 1) {
-                    image.setRGB(j - 1, i - 1, 0);
+                    image.setRGB(i - 1, j - 1, 0);
                 }
                 else {
-                    image.setRGB(j - 1, i - 1, 0xffffff);
+                    image.setRGB(i - 1, j - 1, 0xffffff);
                 }
             }
         }
