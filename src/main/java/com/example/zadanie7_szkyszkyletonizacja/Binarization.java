@@ -276,7 +276,7 @@ public class Binarization {
                 int iR = (( iRet & 0xff0000) >> 16);
                 int iAve = ( iR + iG + iB ) / 3;
 
-                 imgSrc.setRGB(row, col, (iR > threshold)?0:0xffffff);
+                 imgSrc.setRGB(row, col, (iR < threshold)?0:0xffffff);
             }
         }
 
