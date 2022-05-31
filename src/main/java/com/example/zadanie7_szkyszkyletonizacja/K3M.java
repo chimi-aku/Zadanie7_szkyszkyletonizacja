@@ -87,6 +87,7 @@ public class K3M {
 
         return imgArray;
     }
+
     public static BufferedImage convertArraytoBinarizatedImg(int[][] imgArray){
 
         int width = imgArray[1].length;
