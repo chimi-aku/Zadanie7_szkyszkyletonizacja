@@ -5,10 +5,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lombok.SneakyThrows;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 
@@ -26,8 +29,9 @@ public class HelloApplication extends Application {
         // TESTING MINUTIAE
 
         BufferedImage img = null;
-        String path = System.getProperty("user.dir") + "\\sample.jpg";
+        String path = System.getProperty("user.dir") + "\\samples\\sample.jpg";
 
+        // #1 image
         try {
             img = ImageIO.read(new File(path));
         } catch (IOException e) {
@@ -42,12 +46,44 @@ public class HelloApplication extends Application {
         int[][] skeletonImgArray = K3M.k3m(imgArray);
         //print2Darray(skeletonImgArray);
 
-        ImageMinutiae ImageMinutiae = MinutiaeExtraction.calculateAllCN(skeletonImgArray);
+        ImageMinutiae imageMinutiae1 = MinutiaeExtraction.calculateAllCN(skeletonImgArray);
+        int[][] cnArray = imageMinutiae1.getCNArray();
+
+
+
+        // #2 image
+
+        path = System.getProperty("user.dir") + "\\samples\\sample_ob.jpg";
+
+        try {
+            img = ImageIO.read(new File(path));
+        } catch (IOException e) {
+            System.out.println("wrong image path");
+        }
+
+        BufferedImage simpleBinarization2 = Binarization.simpleBinarization(img, 120);
+
+        int[][] imgArray2 = K3M.convertBinarizatedImgToArray2D(simpleBinarization2);
+        //print2Darray(imgArray);
+
+        int[][] skeletonImgArray2 = K3M.k3m(imgArray2);
+        //print2Darray(skeletonImgArray);
+
+        ImageMinutiae imageMinutiae2 = MinutiaeExtraction.calculateAllCN(skeletonImgArray2);
+        int[][] cnArray2 = imageMinutiae1.getCNArray();
+
+
+
+        System.out.println(MinutiaeExtraction.compare(imageMinutiae1, imageMinutiae2));;
+
+
+        String path1 = System.getProperty("user.dir") + "palec.txt";
+        String path2 = System.getProperty("user.dir") + "palec_ob.txt";
+
+        save2DarrayToTXT(imgArray, path1);
+        save2DarrayToTXT(imgArray2, path2);
 
         BufferedImage skeletonImg = K3M.convertArraytoBinarizatedImg(skeletonImgArray);
-
-
-
 
     }
 
@@ -70,5 +106,23 @@ public class HelloApplication extends Application {
             }
             System.out.println();
         }
+    }
+
+    @SneakyThrows
+    public void save2DarrayToTXT(int [][]array, String path) {
+
+        StringBuilder builder = new StringBuilder();
+        for(int i = 0; i < array.length; i++)//for each row
+        {
+            for(int j = 0; j < array[0].length; j++)//for each column
+            {
+                builder.append(array[i][j]+"");//append to the output string
+            }
+            builder.append("\n");//append new line at the end of the row
+        }
+        BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+        writer.write(builder.toString());//save the string representation of the board
+        writer.close();
+
     }
 }

@@ -37,16 +37,26 @@ public class MinutiaeExtraction {
                 }
 
 
-                System.out.print(CNArray[row][col]);
+                //System.out.print(CNArray[row][col]);
             }
-            System.out.println();
+            //System.out.println();
         }
 
         return new ImageMinutiae(CNArray, numbersOfCN);
 
     }
 
+    public static boolean compare(ImageMinutiae original, ImageMinutiae passed) {
 
+        for (int i = 0; i < original.getNumbersOfCN().length; i++) {
+            if( Math.abs(original.getNumbersOfCN()[i] - passed.getNumbersOfCN()[i]) == 0){
+                return false;
+            }
+        }
+
+        return true;
+
+    }
 
     private static int calculateCN(int [] pArr) {
 
