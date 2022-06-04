@@ -29,6 +29,7 @@ public class HelloApplication extends Application {
 
         testMinutiaeFromImg("imgtest1.jpg");
         testMinutiaeFromImg("imgtest2.jpg");
+        testMinutiaeFromImg("imgtest3.jpg");
 
 
 
@@ -141,6 +142,7 @@ public class HelloApplication extends Application {
 
     }
 
+    @SneakyThrows
     public void testMinutiaeFromImg(String testFilePath) throws FileNotFoundException {
 
         BufferedImage img = null;
@@ -151,9 +153,15 @@ public class HelloApplication extends Application {
             System.out.println("wrong image path");
         }
 
+
         BufferedImage simpleBinarization = Binarization.simpleBinarization(img, 120);
         int[][] imgArray = K3M.convertBinarizatedImgToArray2D(simpleBinarization);
-        int[][] skeletonImgArray = K3M.k3m(imgArray);
+
+        int[][] skeletonImgArray;
+        skeletonImgArray = K3M.k3m(imgArray);
+
+
+
         ImageMinutiae imageMinutiae = MinutiaeExtraction.calculateAllCN(skeletonImgArray);
         int[][] cnArray = imageMinutiae.getCNArray();
 
