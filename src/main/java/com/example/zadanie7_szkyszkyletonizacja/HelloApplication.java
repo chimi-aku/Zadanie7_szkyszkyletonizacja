@@ -9,21 +9,18 @@ import lombok.SneakyThrows;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
+import java.io.*;
+import java.util.Scanner;
 
 
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
-        stage.show();
+//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+//        Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
+//        stage.setTitle("Hello!");
+//        stage.setScene(scene);
+//        stage.show();
 
 
         // TESTING MINUTIAE
@@ -79,9 +76,12 @@ public class HelloApplication extends Application {
 
         String path1 = System.getProperty("user.dir") + "palec.txt";
         String path2 = System.getProperty("user.dir") + "palec_ob.txt";
+        String path3 = "test1.txt";
 
-        save2DarrayToTXT(imgArray, path1);
-        save2DarrayToTXT(imgArray2, path2);
+        save2DarrayToTXT(cnArray, path1);
+        save2DarrayToTXT(cnArray2, path2);
+        loadFrom2Darray(path3);
+
 
         BufferedImage skeletonImg = K3M.convertArraytoBinarizatedImg(skeletonImgArray);
 
@@ -125,4 +125,48 @@ public class HelloApplication extends Application {
         writer.close();
 
     }
+
+    public int [][] loadFrom2Darray(String path) throws FileNotFoundException{
+
+        int rows = 0;
+        int cols = 0;
+        Scanner file = null;
+
+
+        try {
+            file = new Scanner(new File(path));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Getting number of rows and coums of array
+        while (file.hasNextLine()) {
+            String line = file.nextLine();
+            cols = Math.max(cols, line.length());
+            rows++;
+        }
+
+        int[][] resArr = new int[rows][cols];
+
+        // Reseting scanner
+        try {
+            file = new Scanner(new File(path));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Fillig up the array
+        for(int row = 0; row < rows; row++) {
+            String line = file.nextLine();
+            for (int col = 0; col < cols; col++) {
+                resArr[row][col] = Integer.parseInt(String.valueOf(line.charAt(col)));
+            }
+        }
+
+        return resArr;
+
+    }
+
+
+
 }

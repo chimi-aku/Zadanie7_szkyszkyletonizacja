@@ -63,7 +63,7 @@ public class MinutiaeExtraction {
         int CN = 0;
 
         for(int i = 1; i <= 8; i++){
-            CN += Math.abs(pArr[i] - pArr[i +1 ]);
+            CN += Math.abs(pArr[i] - pArr[i + 1]);
         }
 
         return CN / 2;
