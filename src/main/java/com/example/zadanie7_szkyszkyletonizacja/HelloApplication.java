@@ -1,9 +1,6 @@
 package com.example.zadanie7_szkyszkyletonizacja;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
 
@@ -25,7 +22,156 @@ public class HelloApplication extends Application {
 
         // TESTING MINUTIAE
 
+//        testMinutiaeFromTXT("test1.txt");
+//        testMinutiaeFromTXT("test2.txt");
+//        testMinutiaeFromTXT("test3.txt");
+//        testMinutiaeFromTXT("test4.txt");
+
+        testMinutiaeFromImg("imgtest1.jpg");
+        testMinutiaeFromImg("imgtest2.jpg");
+
+
+
+
+
+    }
+
+    public static void main(String[] args) {
+        launch();
+
+
+    }
+
+    public void print2Darray(int [][] array)
+    {
+        int numberOfRows = array.length;
+        int numberOfColumns = array[0].length;
+
+        for(int row = 0; row < numberOfRows - 1; row++)
+        {
+            for(int col = 0; col < numberOfColumns - 1; col++)
+            {
+
+                if (array[row][col] != 0) {
+                    System.out.print(array[row][col]);
+                } else {
+                    System.out.print(" ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    public void printArray(int [] array) {
+        System.out.print('[');
+        for (int i = 0; i < array.length; i++) {
+            System.out.print(array[i] + ", ");
+        }
+        System.out.print("]\n");
+    }
+
+    @SneakyThrows
+    public void save2DArrayToTXT(int [][]array, String path) {
+
+        StringBuilder builder = new StringBuilder();
+        for(int i = 0; i < array.length; i++)//for each row
+        {
+            for(int j = 0; j < array[0].length; j++)//for each column
+            {
+                builder.append(array[i][j]+"");//append to the output string
+            }
+            builder.append("\n");//append new line at the end of the row
+        }
+        BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+        writer.write(builder.toString());//save the string representation of the board
+        writer.close();
+
+    }
+
+    public int [][] loadFrom2DArray(String path) throws FileNotFoundException{
+
+        int rows = 0;
+        int cols = 0;
+        Scanner file = null;
+
+
+        try {
+            file = new Scanner(new File(path));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Getting number of rows and coums of array
+        while (file.hasNextLine()) {
+            String line = file.nextLine();
+            cols = Math.max(cols, line.length());
+            rows++;
+        }
+
+        int[][] resArr = new int[rows][cols];
+
+        // Reseting scanner
+        try {
+            file = new Scanner(new File(path));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Fillig up the array
+        for(int row = 0; row < rows; row++) {
+            String line = file.nextLine();
+            for (int col = 0; col < cols; col++) {
+                resArr[row][col] = Integer.parseInt(String.valueOf(line.charAt(col)));
+            }
+        }
+
+        return resArr;
+
+    }
+
+    public void testMinutiaeFromTXT(String testFilePath) throws FileNotFoundException {
+
+        int[][] test = loadFrom2DArray(testFilePath);
+        ImageMinutiae imageMinutiae1 = MinutiaeExtraction.calculateAllCN(test);
+        int[][] cnArray = imageMinutiae1.getCNArray();
+        print2Darray(cnArray);
+        System.out.print("CN array: ");
+        printArray(imageMinutiae1.getNumbersOfCN());
+        System.out.println();
+
+    }
+
+    public void testMinutiaeFromImg(String testFilePath) throws FileNotFoundException {
+
         BufferedImage img = null;
+
+        try {
+            img = ImageIO.read(new File(testFilePath));
+        } catch (IOException e) {
+            System.out.println("wrong image path");
+        }
+
+        BufferedImage simpleBinarization = Binarization.simpleBinarization(img, 120);
+        int[][] imgArray = K3M.convertBinarizatedImgToArray2D(simpleBinarization);
+        int[][] skeletonImgArray = K3M.k3m(imgArray);
+        ImageMinutiae imageMinutiae = MinutiaeExtraction.calculateAllCN(skeletonImgArray);
+        int[][] cnArray = imageMinutiae.getCNArray();
+
+        print2Darray(cnArray);
+        System.out.print("CN array: ");
+        printArray(imageMinutiae.getNumbersOfCN());
+        System.out.println("********************");
+
+    }
+
+
+
+
+
+
+    /*
+
+            BufferedImage img = null;
         String path = System.getProperty("user.dir") + "\\samples\\sample.jpg";
 
         // #1 image
@@ -80,93 +226,10 @@ public class HelloApplication extends Application {
 
         save2DarrayToTXT(cnArray, path1);
         save2DarrayToTXT(cnArray2, path2);
-        loadFrom2Darray(path3);
 
 
         BufferedImage skeletonImg = K3M.convertArraytoBinarizatedImg(skeletonImgArray);
 
-    }
 
-    public static void main(String[] args) {
-        launch();
-
-
-    }
-
-    public void print2Darray(int [][]array)
-    {
-        int numberOfRows = array.length;
-        int numberOfColumns = array[0].length;
-
-        for(int row = 0; row < numberOfRows - 1; row++)
-        {
-            for(int col = 0; col < numberOfColumns - 1; col++)
-            {
-                System.out.print(array[row][col]);
-            }
-            System.out.println();
-        }
-    }
-
-    @SneakyThrows
-    public void save2DarrayToTXT(int [][]array, String path) {
-
-        StringBuilder builder = new StringBuilder();
-        for(int i = 0; i < array.length; i++)//for each row
-        {
-            for(int j = 0; j < array[0].length; j++)//for each column
-            {
-                builder.append(array[i][j]+"");//append to the output string
-            }
-            builder.append("\n");//append new line at the end of the row
-        }
-        BufferedWriter writer = new BufferedWriter(new FileWriter(path));
-        writer.write(builder.toString());//save the string representation of the board
-        writer.close();
-
-    }
-
-    public int [][] loadFrom2Darray(String path) throws FileNotFoundException{
-
-        int rows = 0;
-        int cols = 0;
-        Scanner file = null;
-
-
-        try {
-            file = new Scanner(new File(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        // Getting number of rows and coums of array
-        while (file.hasNextLine()) {
-            String line = file.nextLine();
-            cols = Math.max(cols, line.length());
-            rows++;
-        }
-
-        int[][] resArr = new int[rows][cols];
-
-        // Reseting scanner
-        try {
-            file = new Scanner(new File(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        // Fillig up the array
-        for(int row = 0; row < rows; row++) {
-            String line = file.nextLine();
-            for (int col = 0; col < cols; col++) {
-                resArr[row][col] = Integer.parseInt(String.valueOf(line.charAt(col)));
-            }
-        }
-
-        return resArr;
-
-    }
-
-
-
+    */
 }
