@@ -11,26 +11,6 @@ import java.util.List;
 public class ZangSuen {
 
 
-    final static String[] image = {
-            "                                                          ",
-            " #################                   #############        ",
-            " ##################               ################        ",
-            " ###################            ##################        ",
-            " ########     #######          ###################        ",
-            "   ######     #######         #######       ######        ",
-            "   ######     #######        #######                      ",
-            "   #################         #######                      ",
-            "   ################          #######                      ",
-            "   #################         #######                      ",
-            "   ######     #######        #######                      ",
-            "   ######     #######        #######                      ",
-            "   ######     #######         #######       ######        ",
-            " ########     #######          ###################        ",
-            " ########     ####### ######    ################## ###### ",
-            " ########     ####### ######      ################ ###### ",
-            " ########     ####### ######         ############# ###### ",
-            "                                                          "};
-
     final static int[][] nbrs = {{0, -1}, {1, -1}, {1, 0}, {1, 1}, {0, 1},
             {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}};
 
@@ -38,19 +18,22 @@ public class ZangSuen {
             {0, 4, 6}}};
 
     static List<Point> toWhite = new ArrayList<Point>();
-    static char[][] grid;
+    static int[][] grid;
 
-    public static void main(String[] args) {
-        grid = new char[image.length][];
-        for (int r = 0; r < image.length; r++)
-            grid[r] = image[r].toCharArray();
 
-        thinImage();
-    }
-
-    static void thinImage() {
+    static int [][] thinImage(int [][] imgArray) {
         boolean firstStep = false;
         boolean hasChanged;
+
+        int numberOfRows = imgArray.length;
+        int numberOfColumns = imgArray[0].length;
+        grid = new int[numberOfRows][numberOfColumns];
+
+        // Fillig up grid array
+        for (int r = 0; r < imgArray.length; r++)
+            for (int c = 0; c < imgArray[0].length; c++) {
+                grid[r][c] = imgArray[r][c];
+            }
 
         do {
             hasChanged = false;
@@ -59,7 +42,7 @@ public class ZangSuen {
             for (int r = 1; r < grid.length - 1; r++) {
                 for (int c = 1; c < grid[0].length - 1; c++) {
 
-                    if (grid[r][c] != '#')
+                    if (grid[r][c] != 1)
                         continue;
 
                     int nn = numNeighbors(r, c);
@@ -78,18 +61,18 @@ public class ZangSuen {
             }
 
             for (Point p : toWhite)
-                grid[p.y][p.x] = ' ';
+                grid[p.y][p.x] = 0;
             toWhite.clear();
 
         } while (firstStep || hasChanged);
 
-        printResult();
+        return grid;
     }
 
     static int numNeighbors(int r, int c) {
         int count = 0;
         for (int i = 0; i < nbrs.length - 1; i++)
-            if (grid[r + nbrs[i][1]][c + nbrs[i][0]] == '#')
+            if (grid[r + nbrs[i][1]][c + nbrs[i][0]] == 1)
                 count++;
         return count;
     }
@@ -97,8 +80,8 @@ public class ZangSuen {
     static int numTransitions(int r, int c) {
         int count = 0;
         for (int i = 0; i < nbrs.length - 1; i++)
-            if (grid[r + nbrs[i][1]][c + nbrs[i][0]] == ' ') {
-                if (grid[r + nbrs[i + 1][1]][c + nbrs[i + 1][0]] == '#')
+            if (grid[r + nbrs[i][1]][c + nbrs[i][0]] == 0) {
+                if (grid[r + nbrs[i + 1][1]][c + nbrs[i + 1][0]] == 1)
                     count++;
             }
         return count;
@@ -110,7 +93,7 @@ public class ZangSuen {
         for (int i = 0; i < 2; i++)
             for (int j = 0; j < group[i].length; j++) {
                 int[] nbr = nbrs[group[i][j]];
-                if (grid[r + nbr[1]][c + nbr[0]] == ' ') {
+                if (grid[r + nbr[1]][c + nbr[0]] == 0) {
                     count++;
                     break;
                 }
@@ -118,10 +101,6 @@ public class ZangSuen {
         return count > 1;
     }
 
-    static void printResult() {
-        for (char[] row : grid)
-            System.out.println(row);
-    }
 
 
 }

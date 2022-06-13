@@ -27,10 +27,12 @@ public class HelloApplication extends Application {
 //        testMinutiaeFromTXT("test3.txt");
 //        testMinutiaeFromTXT("test4.txt");
 
-        testMinutiaeFromImg("imgtest1.jpg");
-        testMinutiaeFromImg("imgtest2.jpg");
+//        testMinutiaeFromImg("imgtest1.jpg");
+//        testMinutiaeFromImg("imgtest2.jpg");
         testMinutiaeFromImg("imgtest3.jpg");
 
+        System.out.print("--------------ZANG SEUN--------------");
+        testMinutiaeFromImgZang("imgtest3.jpg");
 
 
 
@@ -159,6 +161,35 @@ public class HelloApplication extends Application {
 
         int[][] skeletonImgArray;
         skeletonImgArray = K3M.k3m(imgArray);
+
+
+
+        ImageMinutiae imageMinutiae = MinutiaeExtraction.calculateAllCN(skeletonImgArray);
+        int[][] cnArray = imageMinutiae.getCNArray();
+
+        print2Darray(cnArray);
+        System.out.print("CN array: ");
+        printArray(imageMinutiae.getNumbersOfCN());
+        System.out.println("********************");
+
+    }
+
+    public void testMinutiaeFromImgZang(String testFilePath) throws FileNotFoundException {
+
+        BufferedImage img = null;
+
+        try {
+            img = ImageIO.read(new File(testFilePath));
+        } catch (IOException e) {
+            System.out.println("wrong image path");
+        }
+
+
+        BufferedImage simpleBinarization = Binarization.simpleBinarization(img, 120);
+        int[][] imgArray = K3M.convertBinarizatedImgToArray2D(simpleBinarization);
+
+        int[][] skeletonImgArray;
+        skeletonImgArray = ZangSuen.thinImage(imgArray);
 
 
 

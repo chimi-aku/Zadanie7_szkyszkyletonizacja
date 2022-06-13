@@ -108,6 +108,7 @@ public class K3M {
         }
         return image;
     }
+
     private static int getWeight(int[][] imageWidened, int i, int j) {
         int weight;
         weight = imageWidened[i - 1][j] +
