@@ -9,14 +9,13 @@ public class MinutiaeExtraction {
         int numberOfRows = imgArray.length;
         int numberOfColumns = imgArray[0].length;
         int[][] CNArray = new int[numberOfRows][numberOfColumns];
-        int[] numbersOfCN = new int[5];
+        int[] numbersOfCN = new int[10];
 
         for(int row = 1; row < numberOfRows - 1; row++)
         {
             for(int col = 1; col < numberOfColumns - 1; col++)
             {
                 if(imgArray[row][col] != 0) {
-
                     //Fillig up window to anylize
                     int[] pArr = new int[10];
                     pArr[0] = imgArray[row][col];
@@ -30,9 +29,9 @@ public class MinutiaeExtraction {
                     pArr[8] = imgArray[row + 1][col + 1];
                     pArr[9] = pArr[1];
 
-                    int CN = calculateCN(pArr);
+                    int CN = calculateCN2(pArr);
                     CNArray[row][col] = CN;
-                    numbersOfCN[CN]++;
+                    //numbersOfCN[CN]++;
 
                 }
 
@@ -48,11 +47,7 @@ public class MinutiaeExtraction {
 
     public static boolean compare(ImageMinutiae original, ImageMinutiae passed) {
 
-        for (int i = 0; i < original.getNumbersOfCN().length; i++) {
-            if( Math.abs(original.getNumbersOfCN()[i] - passed.getNumbersOfCN()[i]) == 0){
-                return false;
-            }
-        }
+
 
         return true;
 
@@ -69,5 +64,55 @@ public class MinutiaeExtraction {
         return CN / 2;
 
     }
+
+    private static int calculateCN2(int [] pArr) {
+        int CN = 0;
+
+        for(int i = 1; i <= 8; i++){
+            CN += pArr[i];
+        }
+
+        return CN;
+    }
+
+
+    public static ImageMinutiae getCN(int skeleton[][])//after thinning
+    {
+        int[] numbersOfCN = new int[10];
+        int di[]=new int[]{0,-1,-1,-1,0,1,1,1};
+        int dj[]=new int[]{1,1,0,-1,-1,-1,0,1};
+
+        int i,j,k;
+
+
+        int trimL=skeleton[0].length-1;
+        int trimT=skeleton.length-1;
+        for(i=0;i<skeleton.length;i++)
+            for(j=0;j<skeleton[0].length;j++)
+                if(skeleton[i][j]>0)
+                {
+                    trimT=Math.min(trimT, i);
+                    trimL=Math.min(trimL, j);
+                }
+
+        int CN[][]=new int[skeleton.length-trimT][skeleton[0].length-trimL];
+
+        for(i=trimT;i<skeleton.length-1;i++)
+            for(j=trimL;j<skeleton[0].length-1;j++)
+            {
+                if(skeleton[i][j] != 0) {
+                    CN[i-trimT][j-trimL]=0;
+                    for(k=1;k<8;k++)
+                        CN[i-trimT][j-trimL]+=Math.abs(skeleton[i+di[k-1]][j+dj[k-1]]-skeleton[i+di[k]][j+dj[k]]);
+                    numbersOfCN[CN[i-trimT][j-trimL]]++;
+                }
+
+            }
+
+        return new ImageMinutiae(CN, numbersOfCN);
+
+    }
+
+
 
 }
