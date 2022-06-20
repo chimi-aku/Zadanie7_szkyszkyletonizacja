@@ -52,7 +52,12 @@ public class ZangSuen {
                     if (numTransitions(r, c) != 1)
                         continue;
 
-                    if (!atLeastOneIsWhite(r, c, firstStep ? 0 : 1))
+//                    if (!atLeastOneIsWhite(r, c, firstStep ? 0 : 1))
+//                        continue;
+                    if(!(grid[r - 1][c] == 0 || grid[r][c + 1] == 0 || grid[r + 1][c] == 0))
+                        continue;
+
+                    if(!(grid[r ][c - 1] == 0 || grid[r][c + 1] == 0 || grid[r + 1][c] == 0))
                         continue;
 
                     toWhite.add(new Point(c, r));

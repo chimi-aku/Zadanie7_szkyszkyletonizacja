@@ -29,9 +29,10 @@ public class MinutiaeExtraction {
                     pArr[8] = imgArray[row + 1][col + 1];
                     pArr[9] = pArr[1];
 
-                    int CN = calculateCN2(pArr);
+                    int CN = calculateCN(pArr);
                     CNArray[row][col] = CN;
-                    //numbersOfCN[CN]++;
+                    if(CN >= 1 && CN <= 4)
+                        numbersOfCN[CN]++;
 
                 }
 
@@ -45,11 +46,13 @@ public class MinutiaeExtraction {
 
     }
 
-    public static boolean compare(ImageMinutiae original, ImageMinutiae passed) {
+    public static boolean compare(ImageMinutiae original, ImageMinutiae in) {
 
+        boolean res = false;
+        if(Math.abs(original.getNumbersOfCN()[3] - in.getNumbersOfCN()[3]) < 20 && Math.abs(original.getNumbersOfCN()[4] - in.getNumbersOfCN()[4]) < 20)
+            return true;
 
-
-        return true;
+        return false;
 
     }
 
@@ -63,16 +66,6 @@ public class MinutiaeExtraction {
 
         return CN / 2;
 
-    }
-
-    private static int calculateCN2(int [] pArr) {
-        int CN = 0;
-
-        for(int i = 1; i <= 8; i++){
-            CN += pArr[i];
-        }
-
-        return CN;
     }
 
 

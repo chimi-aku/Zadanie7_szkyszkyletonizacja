@@ -33,7 +33,7 @@ public class HelloApplication extends Application {
 
         System.out.print("--------------ZANG SEUN--------------");
         ImageMinutiae imageMinutiae1 = testMinutiaeFromImgZang("plus.jpg");
-        ImageMinutiae imageMinutiae3 = testMinutiaeFromImgZang("x.jpg");
+        ImageMinutiae imageMinutiae3 = testMinutiaeFromImgZang("x1px.jpg");
         System.out.print("--------------K3M--------------");
 
 //        ImageMinutiae imageMinutiae1 = testMinutiaeFromImgK3M("imgtest1.jpg");
